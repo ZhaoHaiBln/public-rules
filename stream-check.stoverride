@@ -1,0 +1,64 @@
+name: 流媒体与节点检测
+desc: 检测当前节点落地 IP 归属地及主流媒体解锁状态
+
+panels:
+  - title: "流媒体检测"
+    style: "grid"
+    rows: 2
+    columns: 2
+    items:
+      - title: "YouTube"
+        content: "检查中..."
+        url: "https://www.youtube.com"
+        script: |
+          $httpClient.get('https://www.youtube.com/premium', function(error, response, data){
+            if (error) {
+              $done({title: "YouTube", content: "连接失败", color: "#FF5252"});
+            } else if (response.status === 200 && data.indexOf('Premium is not available in your country') === -1) {
+              $done({title: "YouTube", content: "支持 Premium", color: "#4CAF50"});
+            } else {
+              $done({title: "YouTube", content: "仅网页/不支持", color: "#FFC107"});
+            }
+          });
+
+      - title: "Netflix"
+        content: "检查中..."
+        url: "https://www.netflix.com"
+        script: |
+          $httpClient.get('https://www.netflix.com/title/80018499', function(error, response, data){
+            if (error) {
+              $done({title: "Netflix", content: "连接失败", color: "#FF5252"});
+            } else if (response.status === 200) {
+              $done({title: "Netflix", content: "完整解锁", color: "#4CAF50"});
+            } else if (response.status === 403) {
+              $done({title: "Netflix", content: "仅自制剧", color: "#FFC107"});
+            } else {
+              $done({title: "Netflix", content: "原生封锁", color: "#FF5252"});
+            }
+          });
+
+      - title: "OpenAI"
+        content: "检查中..."
+        url: "https://chatgpt.com"
+        script: |
+          $httpClient.get('https://chatgpt.com', function(error, response, data){
+            if (error) {
+              $done({title: "OpenAI", content: "连接失败", color: "#FF5252"});
+            } else if (response.status === 200) {
+              $done({title: "OpenAI", content: "服务正常", color: "#4CAF50"});
+            } else {
+              $done({title: "OpenAI", content: "受限/封锁", color: "#FF5252"});
+            }
+          });
+
+      - title: "落地 IP"
+        content: "查询中..."
+        script: |
+          $httpClient.get('https://ipinfo.io/json', function(error, response, data){
+            if (error) {
+              $done({title: "落地 IP", content: "获取失败"});
+            } else {
+              let info = JSON.parse(data);
+              $done({title: "落地 IP", content: info.country + " - " + info.ip, color: "#2196F3"});
+            }
+          });
