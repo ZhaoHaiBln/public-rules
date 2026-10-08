@@ -377,10 +377,34 @@ DOMAIN-SUFFIX,zijiecdn.com
 DOMAIN-SUFFIX,ziroom.com
 DOMAIN-SUFFIX,zuoyebang.com
 
-# 核心安全关键字（已剔除易误杀的海外关键字）
-DOMAIN-KEYWORD,.tmall.com
-DOMAIN-KEYWORD,alicdn
-DOMAIN-KEYWORD,alipay
-DOMAIN-KEYWORD,aliyun
-DOMAIN-KEYWORD,baidu
-DOMAIN-KEYWORD,taobao
+# 京东 / 一号店：业务、图片与支付补充
+# 来源（核对日期 2026-10-08）：
+# https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/JingDong/JingDong.list
+DOMAIN-SUFFIX,jd-app.com
+DOMAIN-SUFFIX,jdcontent.com
+DOMAIN-SUFFIX,jdfw1.com
+DOMAIN-SUFFIX,jdgslb.com
+DOMAIN-SUFFIX,jdgslb.net
+DOMAIN-SUFFIX,jdpaydns.com
+DOMAIN-SUFFIX,jingdong.com
+DOMAIN-SUFFIX,yhcdn.cn
+DOMAIN-SUFFIX,yhd.com
+DOMAIN-SUFFIX,yihaodian.com
+DOMAIN-SUFFIX,yihaodianimg.com
+DOMAIN-SUFFIX,yihaomall.com
+
+# 短剧 / 番茄业务候选补充：红果实际调用仍需连接记录核对
+# 来源（核对日期 2026-10-08）：
+# https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ByteDance/ByteDance.list
+DOMAIN-SUFFIX,changdunovel.com
+DOMAIN-SUFFIX,fqnovel.com
+DOMAIN-SUFFIX,fqnovelim.com
+DOMAIN-SUFFIX,fqnovelpic.com
+DOMAIN-SUFFIX,fqnovelstatic.com
+DOMAIN-SUFFIX,fqnovelvod.com
+DOMAIN-SUFFIX,fanqiesdk.com
+DOMAIN-SUFFIX,fanqiesdkpic.com
+DOMAIN-SUFFIX,fanqiesdkstatic.com
+DOMAIN-SUFFIX,fanqiesdkvod.com
+
+# 使用精确域名或域名后缀；不使用包含 taobao/baidu 等文本的宽泛关键词。
