@@ -408,3 +408,11 @@ DOMAIN-SUFFIX,fanqiesdkstatic.com
 DOMAIN-SUFFIX,fanqiesdkvod.com
 
 # 使用精确域名或域名后缀；不使用包含 taobao/baidu 等文本的宽泛关键词。
+
+# ACL4SSR 国内 App 域名补充（2026-10-12）
+# 已有综合兜底中的域名提升到前置直连，不导入宽泛关键词。
+# 来源：https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list
+# ACL4SSR 补充条目遵循 CC BY-SA 4.0：https://creativecommons.org/licenses/by-sa/4.0/
+DOMAIN-SUFFIX,biliapi.com
+DOMAIN-SUFFIX,bilivideo.cn
+DOMAIN-SUFFIX,xhscdn.com
