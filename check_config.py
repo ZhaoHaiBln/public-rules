@@ -44,11 +44,14 @@ for name in groups:
     walk(name, set())
 for alias in ['▶️ YouTube', '🛍️ Google Play']:
     assert groups[alias] == ['[]🌐 Google服务'], alias
-assert groups['🌐 Google服务'][0] == '[]🇺🇸 美国-IEPL'
-assert groups['✈️ Telegram'][0] == '[]🇭🇰 香港-IEPL'
-assert groups['🤖 AI平台'][0] == '[]🇺🇸 美国-IEPL'
-assert groups['🎬 Emby'][0] == '[]🇭🇰 香港-IEPL'
+assert groups['🌐 Google服务'][0] == '[]🇺🇸 美国'
+assert groups['✈️ Telegram'][0] == '[]🇭🇰 香港'
+assert groups['🤖 AI平台'][0] == '[]🇺🇸 美国'
+assert groups['🎬 Emby'][0] == '[]🇭🇰 香港'
 assert groups['🛑 广告拦截'][0] == '[]DIRECT'
+assert '-IEPL' not in text
+for region in ['🇭🇰 香港','🇸🇬 新加坡','🇺🇸 美国']:
+    assert groups[region][:3] == ['[]'+region+' · '+a for a in ['api-linkcube','Flower_Trojan','liangxin']]
 urls = []
 for policy, resource in rules:
     assert policy in groups or policy in builtins, policy

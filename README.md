@@ -1,81 +1,34 @@
-# public-rules · Stash / 塔台
+# public-rules · ACL4SSR Full / Stash / 塔台
 
-面向塔台生成 Stash 配置的精简方案。通用分流采用 ACL4SSR，Google、国内及独立流媒体采用 blackmatrix7 的成熟规则来源。
+以 ACL4SSR 官方 `ACL4SSR_Online_Full.ini` 的全部业务分类为基础，blackmatrix7 补充 Google、京东、PayPal、Disney+、PrimeVideo、Max、Emby。不是把两个仓库所有列表重复拼接，也不承诺“规则越多越快”。
 
-导入地址仍为：
+方案地址：https://raw.githubusercontent.com/ZhaoHaiBln/public-rules/main/custom_full.ini 。在塔台更新方案后重新生成 Stash 配置。建议保留已知可用的原版 ACL4SSR 配置进行同节点对比。
 
-https://raw.githubusercontent.com/ZhaoHaiBln/public-rules/main/custom_full.ini
+## 与官方 Full 的区别
 
-## 使用
+- 保留其微软 Bing、OneDrive、微软、苹果、游戏、网易音乐、哔哩哔哩、巴哈姆特、国内外媒体、国内域名与企业 IP、下载、GFW、GEOIP CN、代理兜底分类。
+- Google 搜索、FCM、GoogleCN、Play、Pay、Wallet、YouTube 共用 Google服务 的实际节点，默认美国入口。GoogleCN 从官方的直连改为此组，避免下载域名被拆分。
+- AI、PrimeVideo、Max、PayPal 默认美国入口；Telegram、Emby 默认香港入口；Netflix、Disney+、通用国外默认新加坡入口。
+- 三个机场分别用节点名中的 `Flower_Trojan`、`liangxin`、`api-linkcube` 识别；不按 IEPL、专线、IPLC 或实际代理协议区分。请在塔台保留这些订阅名称后缀，名称改变会影响识别。
+- 每个机场各设香港、新加坡、美国三个自动测速池，共九个。香港、新加坡、美国入口可选择该地区的三个机场池；机场默认顺序为 api-linkcube、Flower_Trojan、liangxin，客户端可切换。
+- 其他地区混合三个机场且排除香港、新加坡、美国；手动选择可查看全部节点。没有相应节点的池为 REJECT，需要切换到有节点的机场池。
+- 官方局域网源含 `198.18.0.0/16`；为了不把 Stash Fake IP 范围当直连网段，本版改用明确私网规则，没有照搬此集合。
+- 保留少量已核对的番茄/短剧域名与 Gemini 端点适配。没有整段导入 ByteDance 或云服务商 ASN。
+- BanAD/BanProgramAD 保留为注释，默认不加载；广告组默认 DIRECT。确认基础业务可用后，可取消相应 ruleset 行的注释并将组改为 REJECT。取消注释后规则会改变，须重新验证。
+- 沿用此前核对的塔台 1.0.21 General DNS 设置；塔台界面全局设置可能覆盖它。不是原版 ACL4SSR 的 DNS，须以实际导出配置为准。
 
-1. 在塔台重新导入上述方案地址，再选择 Stash 生成配置。更新 GitHub 文件不会自动改写已经生成的旧配置；更换方案后需要重新生成。
-2. 建议新建一份 Stash 配置进行验证，保留旧配置便于切回；各端使用同一份方案，节点订阅仍在塔台管理。
-3. 先选择一个已知可用的节点，在“🌐 Google服务”中选择它。Google 搜索、账号、Play / Pay / Wallet 与 YouTube 共用该组的实际出口；“Google Play”“YouTube”是只有一个成员的入口，不再各自选不同节点。
-4. 依次检查 Google 搜索、YouTube 首页和播放、Play 下载、Telegram、AI，以及京东、一号店、红果。确认正常后再考虑启用广告拦截。
+## 使用与对比
 
-不要把订阅地址、节点密码、UUID、密钥或付款资料提交到这个公开仓库。
+在塔台 1.0.21 导入本 INI 生成新的 Stash 配置，保留原版 ACL4SSR 对照。不要直接把 INI 当作 Stash YAML。更新方案后需重新生成。
 
-## 分组与偏好
+两份配置使用相同节点、网络与测试业务，比较 Google 搜索、Play/Pay 下载、YouTube 播放、Telegram、AI、京东、一号店、红果。先在 Google服务 和其他服务组选择你已知可用的节点，避免地区筛选没有节点导致误判。速度应以设备实测为准。
 
-| 服务 | 默认首选 |
-| --- | --- |
-| Google / Play / Pay / Wallet / YouTube | Google服务 → 美国 IEPL |
-| AI、PrimeVideo、Max、PayPal | 美国 IEPL |
-| Telegram、Emby | 香港 IEPL |
-| 国外信息、Netflix、Disney+ | 新加坡 IEPL |
-| 国内直连、国内漏网 | DIRECT |
-| 广告拦截 | DIRECT（关闭拦截）；可手动改为 REJECT |
-| 国外漏网 | 国外信息 |
+不要公开提交真实订阅地址、节点密码、UUID 或密钥。验证使用虚拟节点，不连接用户代理。
 
-IEPL 地区组只匹配含 IEPL 标记的节点；只有“专线”或 IPLC 标记的节点不进入 IEPL 组。地区名和 IEPL 标记可按任意顺序出现。
+## 维护
 
-地区自动组与手动节点池都带 REJECT 作为空池的保护策略，避免无匹配节点时被塔台 1.0.21 默认为 DIRECT。REJECT 不是额外的代理节点。某地区没有节点时，应选择存在节点的地区或手动选择；方案不会凭空创建节点。
+公开规则直接引用上游，随上游更新；依赖网络可访问 GitHub raw。规则顺序按首次命中执行，同一个域名可能存在于多个上游集合，业务分类放在通用集合前。未导入 blackmatrix7 全量 China/Global 叠加覆盖 ACL 基础。
 
-## 规则来源与顺序
+运行 `python check_config.py` 检查格式、引用、空池和偏好；`--online` 可检查公开源可访问性。检查和转换通过不等于 Stash 真机联网通过；无实际塔台导出与设备实测时不作此保证。
 
-1. 明确私网网段与 `.lan` / `.local`，不把 `198.18.0.0/16` Fake IP 地址池作为直连规则。
-2. 京东 / 一号店的成熟集合，及少量番茄 / 短剧业务补充。
-3. ACL4SSR AI 集合，外加精确 Gemini API 等业务域名；不使用 `apis.google.com` 后缀作为 Gemini 专用规则。
-4. Telegram、PayPal、Netflix、Disney+、PrimeVideo、Max、Emby 专用集合。
-5. YouTube 核心与 Play 接口，再到 Google 共用 API / CDN 和 Google 完整集合。它们共用一个实际出口。
-6. `.cn` 和 China 国内综合集合。
-7. 可选 BanAD、ProxyGFWlist、中国 IP 和国外代理兜底。
-
-共有 13 个远程规则源，全部来自下面两个公开项目，不再引用本仓库旧版自建列表。上游集合仍包含各自的关键词、IP 或进程规则；本方案没有宣称所有上游规则都不存在宽泛匹配。进程规则在部分 Stash 平台上可能被忽略，主要分流不依赖进程名。
-
-- [ACL4SSR](https://github.com/ACL4SSR/ACL4SSR)：通用国外、AI 与可选广告集合，CC BY-SA 4.0。
-- [blackmatrix7/ios_rule_script](https://github.com/blackmatrix7/ios_rule_script)：Google、China、京东、Telegram、PayPal、流媒体集合，遵循上游许可与使用声明。
-- Google 共用下载接口 / CDN 补充参考 [Android Enterprise 网络要求](https://support.google.com/work/android/answer/10513641?hl=en)。
-- 番茄 / 短剧补充来源 [ByteDance 列表](https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/ByteDance/ByteDance.list)。这不是完整的红果连接清单，是否覆盖当前 App 仍需实测。
-
-没有整份导入国内公司的海外云 IP、宽泛下载匹配、国际版国内媒体列表，也不继续维护旧版的大型自建 AI / 国内 / 国外 / 媒体 / 广告集合。
-
-## DNS 与塔台 1.0.21
-
-方案末尾的 `[General]` 段提供 IPv6 和 DNS 参数。已核对塔台官方 `v1.0.21` 源码：该版本会读取 `ipv6`、`dns-server`、`encrypted-dns-server`、`proxy-test-url` 并映射到生成配置。
-
-- 本方案默认关闭 IPv6，提供两个国内基础 DNS 与两个国内 DoH。
-- 目的是使节点域名解析和国内直连的基础解析可用，并避免原默认配置中的国外 DoH 直连依赖；代理流量的域名处理由 Stash / 塔台生成模式负责。
-- 塔台中的全局网络设置可能覆盖方案值。生成后应检查 `ipv6: false`、`dns.nameserver` 和 `dns.proxy-server-nameserver` 是否与方案对应。
-- 不强制启用 DNS follow-rule，不自行添加全局 QUIC 拦截，不嵌入节点凭据。
-
-官方 subconverter 能验证规则和策略组，但不会应用这里的 `[General]` 网络段。此方案的使用入口是塔台，不是将普通 subconverter 输出直接视为最终 Stash 文件。
-
-## 检查与验证边界
-
-运行 `python check_config.py` 可离线检查结构、引用、环路、共享 Google 出口、空节点保护和兜底位置；加 `--online` 可读取公开规则源检查 URL / 内容。
-
-本轮重建验证：
-
-- 13 个实际使用的公开规则 URL 返回正常。
-- 官方 subconverter v0.9.0，虚拟节点与规则快照：57 个域名检查、4 种节点场景通过；24 个分组、14,096 条生成规则。
-- 官方 Mihomo v1.19.32 实际加载完整测试配置通过，包括规则、策略组和已映射的 DNS。
-- 塔台 `v1.0.21` 的 INI / 网络参数与空组行为已做源码核对。
-
-这些不等于实际执行塔台 App 或在 Stash Android 1.1.5、iOS、macOS 等设备上成功联网。节点质量、账号地区、运营商网络、DNS 模式和应用缓存仍会影响结果；本仓库不承诺“全端已实测”。
-
-## 仓库清理与回退
-
-当前入口保留 `custom_full.ini`。旧版 `ai.list`、`domestic.list`、`foreign.list`、`media.list`、`reject.list` 从当前版本移除；旧内容仍在 Git 历史中。外部若直接订阅这些旧 `.list` URL，需要改为新方案入口；旧 URL 删除后不会继续提供规则。
-
-重建前最后版本为 `924cec452f08e572272e2ebd3ca42b113c1a5e9c`。如需回退，优先 revert 重建提交，并在塔台重新生成旧方案，而不是强制推送覆盖后续改动。
+来源：[ACL4SSR 官方完整模板](https://github.com/ACL4SSR/ACL4SSR/blob/master/Clash/config/ACL4SSR_Online_Full.ini)、[blackmatrix7 分流规则](https://github.com/blackmatrix7/ios_rule_script/tree/master/rule/Clash)。保留上游署名，使用遵循各上游许可与声明。ACL4SSR README 标注 CC BY-SA 4.0；blackmatrix7 仓库 LICENSE 与各目录许可、特别声明均适用。
