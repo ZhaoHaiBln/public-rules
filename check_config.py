@@ -50,8 +50,11 @@ assert groups['🤖 AI平台'][0] == '[]🇺🇸 美国'
 assert groups['🎬 Emby'][0] == '[]🇭🇰 香港'
 assert groups['🛑 广告拦截'][0] == '[]DIRECT'
 assert '-IEPL' not in text
-for region in ['🇭🇰 香港','🇸🇬 新加坡','🇺🇸 美国']:
-    assert groups[region][:3] == ['[]'+region+' · '+a for a in ['api-linkcube','Flower_Trojan','liangxin']]
+for region in ['🇭🇰 香港','🇸🇬 新加坡','🇺🇸 美国','🇹🇼 台湾','🇯🇵 日本']:
+    assert len(groups[region]) == 4 and groups[region][1] == '[]REJECT', region
+    assert f'custom_proxy_group={region}`url-test`' in text, region
+assert not any(airport in text for airport in ['api-linkcube','Flower_Trojan','liangxin'])
+assert groups['🌐 全部节点'] == ['.*', '[]REJECT']
 urls = []
 for policy, resource in rules:
     assert policy in groups or policy in builtins, policy
